@@ -35,10 +35,11 @@ namespace MobiQu.Services.Application.Services.Concrete
                     {
                         Id = coldChainBox.Id,
                         Title = coldChainBox.Title,
-                        CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.CreatedAt.Value),
-                        ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.ModifiedAt.Value)
+                        CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.CreatedAt),
+                        ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.ModifiedAt)
                     },
-                    ResponseType = Common.Enums.HttpResponseType.OK
+                    ResponseType = Common.Enums.HttpResponseType.OK,
+                    
                 };
                 return responseModel;
             }
@@ -60,8 +61,8 @@ namespace MobiQu.Services.Application.Services.Concrete
                     {
                         Id = coldChainBox.Id,
                         Title = coldChainBox.Title,
-                        CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.CreatedAt.Value),
-                        ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.ModifiedAt.Value)
+                        CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.CreatedAt),
+                        ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(coldChainBox.ModifiedAt)
                     },
                     ResponseType = Common.Enums.HttpResponseType.OK
                 };
@@ -70,7 +71,7 @@ namespace MobiQu.Services.Application.Services.Concrete
             return null;
         }
 
-        public async Task<ResponseModel<List<ColdChainBoxDto>>> GetColdChainBoxesByCompanyId(Guid companyId, int skip, int take)
+        public async Task<ResponseModel<List<ColdChainBoxDto>>> GetColdChainBoxesByCompanyIdAsync(Guid companyId, int skip, int take)
         {
 
             var coldChainBoxes = await _coldChainBoxRepository.Queryable(x => x.CompanyId.Equals(companyId))
@@ -79,8 +80,8 @@ namespace MobiQu.Services.Application.Services.Concrete
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(x.CreatedAt.Value),
-                    ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(x.ModifiedAt.Value)
+                    CreatedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(x.CreatedAt),
+                    ModifiedAtString = EntityUtilities<ColdChainBox>.DateTimeFormater(x.ModifiedAt)
                 }).ToListAsync();
             if (coldChainBoxes != null)
             {
@@ -90,11 +91,14 @@ namespace MobiQu.Services.Application.Services.Concrete
                     IsSuccessFull = true,
                     ResponseDateTime = DateTime.Now,
                     ResponseType = Common.Enums.HttpResponseType.OK,
-                    ResponseMessage = "Veriler başarıyla getirildi"
+                    ResponseMessage = "Veriler başarıyla getirildi",
+                    DataCount = await _coldChainBoxRepository.DataCountAsync(x => x.CompanyId.Equals(companyId))
                 };
 
             }
             return null;
         }
+
+        
     }
 }

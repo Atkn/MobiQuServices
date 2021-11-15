@@ -27,11 +27,11 @@ namespace MobiQu.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoute.ApiRoute.ColdChainBox.GetColdChainBoxes)]
-        public async Task<IActionResult> GetColdChainBoxes(string API_KEY, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetColdChainBoxes(string API_KEY, int skip, int pageSize)
         {
             var companyId = Guid.Parse("8BB239F1-530D-4E8A-943E-7D1248385F05");
 
-            var response = await _coldChainBoxService.GetColdChainBoxesByCompanyId(companyId, 0, 10);
+            var response = await _coldChainBoxService.GetColdChainBoxesByCompanyIdAsync(companyId, skip, pageSize);
             if(response != null)
             {
                 return Ok(response);

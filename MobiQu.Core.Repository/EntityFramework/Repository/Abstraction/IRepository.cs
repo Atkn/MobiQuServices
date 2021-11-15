@@ -14,6 +14,9 @@ namespace MobiQu.Services.Core.Persistence.EntityFramework.Repository.Abstractio
         IQueryable<TTable>  Queryable(Expression<Func<TTable, bool>> predicate = null);
 
         Task<TTable> FindAsync(Expression<Func<TTable, bool>> predicate = null);
+        Task<int> DataCountAsync(Expression<Func<TTable, bool>> expression = null);
+
+        int DataCount(Expression<Func<TTable, bool>> expression = null);
 
 
 

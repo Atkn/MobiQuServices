@@ -16,6 +16,8 @@ namespace MobiQu.Services.Application.Common.Models.Responses
 
         public string ResponseMessage { get; set; }
 
+        public int? DataCount { get; set; }
+
         public TModel ResponseValue { get; set; }
         public ResponseModel(string responseMessage = null)
         {

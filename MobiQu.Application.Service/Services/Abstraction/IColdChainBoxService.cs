@@ -13,6 +13,6 @@ namespace MobiQu.Services.Application.Services.Abstraction
 
         Task<ResponseModel<ColdChainBoxDto>> GetColdChainBoxById(Guid boxId);
 
-        Task<ResponseModel<List<ColdChainBoxDto>>> GetColdChainBoxesByCompanyId(Guid companyId, int skip, int take);
+        Task<ResponseModel<List<ColdChainBoxDto>>> GetColdChainBoxesByCompanyIdAsync(Guid companyId, int skip, int take);
     }
 }

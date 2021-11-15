@@ -32,9 +32,9 @@ namespace MobiQu.Application.Service.Concrete
                     ResponseValue = new SmartBoxDto
                     {
                         Id = smartBox.Id,
-                        CreatedAtString = EntityUtilities<Company>.DateTimeFormater(smartBox.CreatedAt.Value),
-                        ModifiedAtString = EntityUtilities<Company>.DateTimeFormater(smartBox.ModifiedAt.Value),
-                        Title = smartBox.Title
+                        Title = smartBox.Title,
+                        CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
+                        ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
                     },
                     ResponseDateTime = DateTime.Now,
                     IsSuccessFull = true,
@@ -60,9 +60,9 @@ namespace MobiQu.Application.Service.Concrete
                     ResponseValue = new SmartBoxDto
                     {
                         Id = smartBox.Id,
-                        CreatedAtString = EntityUtilities<Company>.DateTimeFormater(smartBox.CreatedAt.Value),
-                        ModifiedAtString = EntityUtilities<Company>.DateTimeFormater(smartBox.ModifiedAt.Value),
-                        Title = smartBox.Title
+                        Title = smartBox.Title,
+                        CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
+                        ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
                     },
                     ResponseDateTime = DateTime.Now,
                     IsSuccessFull = true,
@@ -86,8 +86,8 @@ namespace MobiQu.Application.Service.Concrete
                {
                    Id = x.Id,
                    Title = x.Title,
-                   CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(x.CreatedAt.Value),
-                   ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(x.ModifiedAt.Value),
+                   CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(x.CreatedAt),
+                   ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(x.ModifiedAt),
                }).ToListAsync();
             if (coldChainBoxes != null)
             {
@@ -97,9 +97,9 @@ namespace MobiQu.Application.Service.Concrete
                     IsSuccessFull = true,
                     ResponseDateTime = DateTime.Now,
                     ResponseType = HttpResponseType.OK,
-                    ResponseMessage = "Veriler başarıyla çekildi"
+                    ResponseMessage = "Veriler başarıyla çekildi",
+                    DataCount = await _smartBoxRepository.DataCountAsync(x => x.CompanyId.Equals(companyId))
                 };
-
             }
             return null;
         }

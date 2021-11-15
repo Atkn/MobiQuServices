@@ -27,7 +27,10 @@ namespace MobiQu.Services.Core.Persistence.EntityFramework.Repository.Concrete
 
         public IQueryable<TTable> Queryable() => Table.AsQueryable();
 
-        public IQueryable<TTable> Queryable(Expression<Func<TTable, bool>> predicate = null) => predicate != null ? Table.Where(predicate).AsQueryable() : Table.AsQueryable(); 
+        public IQueryable<TTable> Queryable(Expression<Func<TTable, bool>> predicate = null) => predicate != null ? Table.Where(predicate).AsQueryable() : Table.AsQueryable();
+
+        public async Task<int> DataCountAsync(Expression<Func<TTable, bool>> expression = null) => expression == null ? await Table.CountAsync() : await Table.CountAsync(expression);
+        public int DataCount(Expression<Func<TTable, bool>> expression = null) => expression == null ? Table.Count() : Table.Count(expression);
 
 
 

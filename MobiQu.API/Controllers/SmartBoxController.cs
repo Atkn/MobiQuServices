@@ -28,7 +28,16 @@ namespace MobiQu.API.Controllers
         public async Task<IActionResult> Index(string API_KEY, int skip, int pageSize)
         {
             var result = await _smartBoxService.GetSmartBoxesAsync(skip, pageSize, Guid.Parse("8BB239F1-530D-4E8A-943E-7D1248385F05"));
-            return Ok(result);
+
+            if (result.IsSuccessFull)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         /// <summary>

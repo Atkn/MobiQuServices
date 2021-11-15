@@ -9,10 +9,11 @@ namespace MobiQu.Services.Application.Common.Utilities
         public static string DateTimeFormater(DateTime? dateTime)
         {
             string dateTimeString = "";
-            if (dateTime != null && dateTime != DateTime.MinValue)
-                dateTimeString = dateTime.Value.ToString("dd/MM/yyyy HH:MM");
-            else
+            if (dateTime == null || dateTime == DateTime.MinValue)
                 dateTimeString = "-";
+            else
+                dateTimeString = dateTime.Value.ToString("dd/MM/yyyy HH:MM");
+
             return dateTimeString;
             
         }

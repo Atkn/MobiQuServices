@@ -35,7 +35,7 @@ namespace MobiQu.API.ApiRoute
             /// <summary>
             /// Müşteriye ait soğuk zincir kutularını listesini getirir
             /// </summary>
-            public const string GetColdChainBoxes = BasePath + "/coldchainboxes&API_KEY={API_KEY}&pageNumber={pageNumber}&pageSize={pageSize}";
+            public const string GetColdChainBoxes = BasePath + "/coldchainboxes&API_KEY={API_KEY}&skip={skip}&pageSize={pageSize}";
 
             /// <summary>
             /// Belirtilen kutu numarasına göre kutu verilerini getirir
