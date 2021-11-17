@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MobiQu.Core.Repository\MobiQu.Services.Core.Persistence.csproj" />
     <ProjectReference Include="..\MobiQu.Services.Application.Common\MobiQu.Services.Application.Common.csproj" />
   </ItemGroup>

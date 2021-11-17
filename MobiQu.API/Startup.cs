@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MobiQu.Application.Service.Abstraction;
 using MobiQu.Application.Service.Concrete;
+using MobiQu.Services.Application.Application.Password;
 using MobiQu.Services.Application.Services.Abstraction;
 using MobiQu.Services.Application.Services.Concrete;
 using MobiQu.Services.Core.Domain.Entitites;
@@ -35,6 +36,8 @@ namespace MobiQu.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddTransient<IPasswordCryptology, PasswordCryptology>();
 
             services.AddTransient<IRepository<SmartBox>, Repository<SmartBox>>();
             services.AddTransient<ISmartBoxService, SmartBoxService>();

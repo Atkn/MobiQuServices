@@ -1,4 +1,5 @@
-﻿using MobiQu.Services.Application.Common.Dto.Company;
+﻿using MobiQu.Services.Application.Application.Password;
+using MobiQu.Services.Application.Common.Dto.Company;
 using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Common.Utilities;
 using MobiQu.Services.Application.Services.Abstraction;
@@ -15,9 +16,11 @@ namespace MobiQu.Services.Application.Services.Concrete
     public class CompanyService : ICompanyService
     {
         private readonly IRepository<Company> _companyRepository;
-        public CompanyService(IRepository<Company> companyRepository)
+        private readonly IPasswordCryptology _passwordCryptology;
+        public CompanyService(IRepository<Company> companyRepository, IPasswordCryptology passwordCryptology)
         {
             _companyRepository = companyRepository;
+            _passwordCryptology = passwordCryptology;
         }
 
         public async Task<ResponseModel<CompanyDto>> GetCompanyInformationAsync(Guid companyId)
@@ -39,7 +42,7 @@ namespace MobiQu.Services.Application.Services.Concrete
                         Email = company.Email,
                         CreatedAtString = EntityUtilities<Company>.DateTimeFormater(company.CreatedAt.Value),
                         ModifiedAtString = EntityUtilities<Company>.DateTimeFormater(company.ModifiedAt.Value),
-                        
+
                     }
                 };
             }
@@ -67,6 +70,55 @@ namespace MobiQu.Services.Application.Services.Concrete
                 };
             }
             return null;
+        }
+
+        public async Task<ResponseModel<LoginResponseDto>> CompanyDetectInformationAsync(string email, string password)
+        {
+            Expression<Func<Company, bool>> expression = x => x.Email.Equals(email);
+            var companyResponse = await _companyRepository.FindAsync(expression);
+            if (companyResponse != null)
+            {
+                string passwordHash = companyResponse.Password;
+                bool verifyPassword = _passwordCryptology.VerifiedPassword(password, passwordHash);
+                if(verifyPassword)
+                {
+                    return new ResponseModel<LoginResponseDto>
+                    {
+                        IsSuccessFull = true,
+                        ResponseDateTime = DateTime.Now,
+                        ResponseMessage = $"{companyResponse.Title} Başarıyla giriş sağlayabilir.",
+                        ResponseValue = new LoginResponseDto
+                        {
+                            Id = companyResponse.Id,
+                            CanLogin = true,
+                            Title = companyResponse.Title,
+
+                        }
+                    };
+                }
+                return new ResponseModel<LoginResponseDto>
+                {
+                    IsSuccessFull = false,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseMessage = $"{email} giriş sağlayamaz.",
+                    ResponseValue = new LoginResponseDto
+                    {
+                        CanLogin = false,
+                    }
+                };
+
+            }
+
+            return new ResponseModel<LoginResponseDto>
+            {
+                IsSuccessFull = false,
+                ResponseDateTime = DateTime.Now,
+                ResponseMessage = $"{email} giriş sağlayamaz.",
+                ResponseValue = new LoginResponseDto
+                { 
+                    CanLogin = false,
+                }
+            }; 
         }
     }
 }

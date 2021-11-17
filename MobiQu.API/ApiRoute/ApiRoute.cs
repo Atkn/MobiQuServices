@@ -61,6 +61,13 @@ namespace MobiQu.API.ApiRoute
             /// Şirketin sistem üzerindeki verilerini getirir
             /// </summary>
             public const string GetCompanyInformationByApiKey = BasePath + "/companyinformation&API_KEY={API_KEY}";
+
+            /// <summary>
+            /// Şirketin login olması için varlığını kontrol eder.
+            /// </summary>
+            public const string CompanyDetectForLogin = BasePath + "/companydetect&email={email}&password={password}";
+
+
         }
 
         public static class Settings

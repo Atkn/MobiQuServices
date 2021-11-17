@@ -12,5 +12,7 @@ namespace MobiQu.Services.Application.Services.Abstraction
         Task<ResponseModel<CompanyDto>> GetCompanyInformationAsync(Guid companyId);
 
         Task<ResponseModel<CompanyDto>> GetCompanyInfomartionByApiKeyAsync(string apiKey);
+
+        Task<ResponseModel<LoginResponseDto>> CompanyDetectInformationAsync(string email, string password);
     }
 }

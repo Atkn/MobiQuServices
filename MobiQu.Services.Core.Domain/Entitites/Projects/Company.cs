@@ -10,5 +10,7 @@ namespace MobiQu.Services.Core.Domain.Entitites
         public string API_KEY { get; set; }
 
         public string Email { get; set; }
+
+        public string Password { get; set; }
     }
 }

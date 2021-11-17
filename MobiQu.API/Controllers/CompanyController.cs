@@ -40,6 +40,20 @@ namespace MobiQu.API.Controllers
             
         }
 
+        [HttpGet(ApiRoute.ApiRoute.Company.CompanyDetectForLogin)]
+        public async Task<IActionResult> GetCompanyInformation(string email, string password)
+        {
+            var result = await _companyService.CompanyDetectInformationAsync(email, password);
+            if (result.IsSuccessFull)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return Ok(new { message = $"{email} ile aradığın bilgilerini bulamadık!" });
+            }
+        }
+
         [HttpGet(ApiRoute.ApiRoute.Company.GetCompanyInformationByApiKey)]
 
         public async Task<IActionResult> GetCompanyInformationyApiKey(string API_KEY)
