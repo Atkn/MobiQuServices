@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MobiQu.Application.Service.Abstraction;
+using MobiQu.Services.Application.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace MobiQu.API.Controllers
     public class SmartBoxController : Controller
     {
         private readonly ISmartBoxService _smartBoxService;
-        public SmartBoxController(ISmartBoxService smartBoxService)
+        private readonly ICompanyService _companyService;
+        public SmartBoxController(ISmartBoxService smartBoxService, ICompanyService companyService)
         {
             _smartBoxService = smartBoxService;
+            _companyService = companyService;
         }
 
         /// <summary>
@@ -27,17 +30,21 @@ namespace MobiQu.API.Controllers
         [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxes)]
         public async Task<IActionResult> Index(string API_KEY, int skip, int pageSize)
         {
-            var result = await _smartBoxService.GetSmartBoxesAsync(skip, pageSize, Guid.Parse("8BB239F1-530D-4E8A-943E-7D1248385F05"));
-
-            if (result.IsSuccessFull)
+            var company = await _companyService.GetCompanyInfomartionByApiKeyAsync(API_KEY);
+            if (company != null)
             {
+                var result = await _smartBoxService.GetSmartBoxesAsync(skip, pageSize, company.ResponseValue.Id);
                 return Ok(result);
+
             }
             else
             {
-                return BadRequest();
+                return Ok(new { message = "Anahatarınız Doğrulanamadı" });
             }
-            
+
+
+
+
         }
 
         /// <summary>
@@ -52,7 +59,8 @@ namespace MobiQu.API.Controllers
             if (response.IsSuccessFull)
             {
                 return Ok(response);
-            }else
+            }
+            else
             {
                 return BadRequest();
             }

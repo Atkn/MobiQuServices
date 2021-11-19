@@ -24,10 +24,7 @@ namespace MobiQu.API.Controllers
         public async Task<IActionResult> Index(string API_KEY)
         {
             var response = await _tableSettings.GetTableSettingsAsync(API_KEY);
-            if (response != null)
-                return Ok(response);
-            else
-                return NotFound();
+            return Ok(response);
         }
     }
 }

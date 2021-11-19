@@ -40,6 +40,7 @@ namespace MobiQu.Services.Application.Services.Concrete
                         Id = company.Id,
                         Title = company.Title,
                         Email = company.Email,
+                        Api_Key = company.API_KEY,
                         CreatedAtString = EntityUtilities<Company>.DateTimeFormater(company.CreatedAt.Value),
                         ModifiedAtString = EntityUtilities<Company>.DateTimeFormater(company.ModifiedAt.Value),
 
@@ -92,7 +93,8 @@ namespace MobiQu.Services.Application.Services.Concrete
                             Id = companyResponse.Id,
                             CanLogin = true,
                             Title = companyResponse.Title,
-
+                            API_KEY = companyResponse.API_KEY,
+                            Email = companyResponse.Email,
                         }
                     };
                 }
