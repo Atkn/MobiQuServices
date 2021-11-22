@@ -18,6 +18,9 @@ namespace MobiQu.Services.Core.Persistence.EntityFramework.Repository.Abstractio
 
         int DataCount(Expression<Func<TTable, bool>> expression = null);
 
+        Task<bool> UpdateEntity(TTable entity);
+
+
 
 
     }

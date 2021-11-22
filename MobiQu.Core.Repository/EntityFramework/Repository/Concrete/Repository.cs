@@ -32,6 +32,21 @@ namespace MobiQu.Services.Core.Persistence.EntityFramework.Repository.Concrete
         public async Task<int> DataCountAsync(Expression<Func<TTable, bool>> expression = null) => expression == null ? await Table.CountAsync() : await Table.CountAsync(expression);
         public int DataCount(Expression<Func<TTable, bool>> expression = null) => expression == null ? Table.Count() : Table.Count(expression);
 
+        public async Task<bool> UpdateEntity(TTable entity)
+        {
+            try
+            {
+                var updated = _context.Entry(entity);
+                updated.State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                return false;
+            }
+        }
 
 
     }

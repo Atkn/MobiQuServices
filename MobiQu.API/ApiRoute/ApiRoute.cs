@@ -76,6 +76,11 @@ namespace MobiQu.API.ApiRoute
             /// Şirketin tablo ayarlarını getirir
             /// </summary>
             public const string GetCompanyTableSettings = BasePath + "/gettablesettings&API_KEY={API_KEY}";
+
+            /// <summary>
+            /// Şirketin tablo ayarlarını Günceller
+            /// </summary>
+            public const string UpdateCompanyTableSettings = BasePath + "/updatetablesettings&API_KEY={API_KEY}";
         }
     }
 }

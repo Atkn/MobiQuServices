@@ -1,4 +1,5 @@
 ﻿using MobiQu.Services.Application.Common.Dto.MobiQuBranchTableSettings;
+using MobiQu.Services.Application.Common.Models.BodyModels.Settings;
 using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Common.Utilities;
 using MobiQu.Services.Application.Services.Abstraction;
@@ -63,12 +64,30 @@ namespace MobiQu.Services.Application.Services.Concrete
                 ResponseDateTime = DateTime.Now,
                 ResponseMessage = $"{API_KEY} anahtarınız doğru değildir.",
             };
+        }
 
+        public async Task<bool> UpdateTableSettingsAsync(UpdateTableSettingsModel tableSettings, string API_KEY)
+        {
+            var company = await _companyRepository.FindAsync(x => x.API_KEY.Equals(API_KEY));
+            if(company != null)
+            {
+                var companyTableSettings = await _tableSettings.FindAsync(x => x.CompanyId.Equals(company.Id));
+                if(companyTableSettings != null)
+                {
+                    companyTableSettings.IsShowBatteryState = tableSettings.IsShowBatteryState;
+                    companyTableSettings.IsShowBoxNumber = tableSettings.IsShowBoxNumber;
+                    companyTableSettings.IsShowHumidity = tableSettings.IsShowHumidity;
+                    companyTableSettings.IsShowLocation = tableSettings.IsShowLocation;
+                    companyTableSettings.IsShowShock = tableSettings.IsShowShock;
+                    companyTableSettings.IsShowTemperature = tableSettings.IsShowTemperature;
+                    companyTableSettings.IsShowLockState = tableSettings.IsShowLockState;
+                    companyTableSettings.IsShowDeliveryStatus = tableSettings.IsShowDeliveryStatus;
 
-
-
-
-
+                    var result = await _tableSettings.UpdateEntity(companyTableSettings);
+                    return result;
+                } 
+            }
+            return false;
         }
     }
 }
