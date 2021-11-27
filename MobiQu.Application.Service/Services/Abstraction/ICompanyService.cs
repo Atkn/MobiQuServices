@@ -14,5 +14,7 @@ namespace MobiQu.Services.Application.Services.Abstraction
         Task<ResponseModel<CompanyDto>> GetCompanyInfomartionByApiKeyAsync(string apiKey);
 
         Task<ResponseModel<LoginResponseDto>> CompanyDetectInformationAsync(string email, string password);
+
+        Task<ResponseModel<RefreshPasswordDto>> UpdatePasswordAsync(string apiKey, string oldPassword, string newPassword, string confirmPassword);
     }
 }

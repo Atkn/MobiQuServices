@@ -11,9 +11,11 @@ namespace MobiQu.API.Controllers
     public class SettingsController : Controller
     {
         private readonly IMobiQuBranchTableSettingsService _tableSettings;
-        public SettingsController(IMobiQuBranchTableSettingsService tableSettings)
+        private readonly ICompanyService _companyService;
+        public SettingsController(IMobiQuBranchTableSettingsService tableSettings, ICompanyService companyService)
         {
             _tableSettings = tableSettings;
+            _companyService = companyService;
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace MobiQu.API.Controllers
         /// <param name="API_KEY"></param>
         /// <returns></returns>
         [HttpPost(ApiRoute.ApiRoute.Settings.UpdateCompanyTableSettings)]
-        public async Task<IActionResult> UpdateTableSettings([FromBody]UpdateTableSettingsModel tableSettings, string API_KEY)
+        public async Task<IActionResult> UpdateTableSettings(string API_KEY, [FromBody]UpdateTableSettingsModel tableSettings)
         {
             var result = await _tableSettings.UpdateTableSettingsAsync(tableSettings, API_KEY);
             if (result)
@@ -45,6 +47,22 @@ namespace MobiQu.API.Controllers
             }
             var respMessage = new { messageValue = $"Tablo Ayarları Güncellenirken Problem Oluştu {API_KEY} ile başlayan anahtarınızı kontrol edin", IsSuccessFull = false };
             return Ok(respMessage);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="API_KEY">Kullanıcının anahtarı</param>
+        /// <param name="oldPassword">Kullanıcının eski şifresi</param>
+        /// <param name="newPassword">Kullanıcının yeni şifresi</param>
+        /// <param name="confirmPassword">Doğruladığı Şifre</param>
+        /// <returns></returns>
+        [HttpPost(ApiRoute.ApiRoute.Settings.UpdateCompanyPassword)]
+        public async Task<IActionResult> UpdatePassword(string API_KEY,string oldPassword, string newPassword, string confirmPassword)
+        {
+            var response = await _companyService.UpdatePasswordAsync(API_KEY, oldPassword, newPassword, confirmPassword);
+            return Ok(response);
         }
     }
 }

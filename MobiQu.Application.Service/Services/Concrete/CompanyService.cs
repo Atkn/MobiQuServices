@@ -73,6 +73,73 @@ namespace MobiQu.Services.Application.Services.Concrete
             return null;
         }
 
+
+        public async Task<ResponseModel<RefreshPasswordDto>> UpdatePasswordAsync(string apiKey, string oldPassword, string newPassword, string confirmPassword)
+        {
+            
+            bool isEqualsPassword = newPassword.Equals(confirmPassword);
+            if (isEqualsPassword)
+            {
+                var company = await _companyRepository.FindAsync(x => x.API_KEY.Equals(apiKey));
+                if (company != null)
+                {
+                    string hashPass = company.Password;
+                    bool verifyPass = _passwordCryptology.VerifiedPassword(oldPassword, hashPass);
+                    if (verifyPass)
+                    {
+                        newPassword = _passwordCryptology.HashPassword(newPassword);
+                        company.Password = newPassword;
+                        company.ModifiedAt = DateTime.Now;
+                        var result = await _companyRepository.UpdateEntity(company);
+                        if (result)
+                        {
+                            return new ResponseModel<RefreshPasswordDto>
+                            {
+                                IsSuccessFull = true,
+                                ResponseDateTime = DateTime.Now,
+                                ResponseValue = new RefreshPasswordDto
+                                {
+                                    IsSuccessFull = false,
+                                    Message = $"Şifreniz Başarıyla Güncellendi!"
+                                }
+                            };
+                        }
+                    }
+                    return new ResponseModel<RefreshPasswordDto>
+                    {
+                        IsSuccessFull = false,
+                        ResponseDateTime = DateTime.Now,
+                        ResponseValue = new RefreshPasswordDto
+                        {
+                            IsSuccessFull = false,
+                            Message = $"Eski Şifreniz Doğrulanamadı!"
+                        }
+                    };
+
+                }
+                return new ResponseModel<RefreshPasswordDto>
+                {
+                    IsSuccessFull = false,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseValue = new RefreshPasswordDto
+                    {
+                        IsSuccessFull = false,
+                        Message = $"{apiKey} - Kullanıcı Bulunamadı!"
+                    }
+                };
+            }
+            return new ResponseModel<RefreshPasswordDto>
+            {
+                IsSuccessFull = false,
+                ResponseDateTime = DateTime.Now,
+                ResponseValue = new RefreshPasswordDto
+                {
+                    IsSuccessFull = false,
+                    Message = $"Şifreler Eşleşmediği İçin İşleme Devam Edilmedi!"
+                }
+            };
+        }
+
         public async Task<ResponseModel<LoginResponseDto>> CompanyDetectInformationAsync(string email, string password)
         {
             Expression<Func<Company, bool>> expression = x => x.Email.Equals(email);
@@ -81,7 +148,7 @@ namespace MobiQu.Services.Application.Services.Concrete
             {
                 string passwordHash = companyResponse.Password;
                 bool verifyPassword = _passwordCryptology.VerifiedPassword(password, passwordHash);
-                if(verifyPassword)
+                if (verifyPassword)
                 {
                     return new ResponseModel<LoginResponseDto>
                     {
@@ -117,10 +184,10 @@ namespace MobiQu.Services.Application.Services.Concrete
                 ResponseDateTime = DateTime.Now,
                 ResponseMessage = $"{email} giriş sağlayamaz.",
                 ResponseValue = new LoginResponseDto
-                { 
+                {
                     CanLogin = false,
                 }
-            }; 
+            };
         }
     }
 }

@@ -81,6 +81,11 @@ namespace MobiQu.API.ApiRoute
             /// Şirketin tablo ayarlarını Günceller
             /// </summary>
             public const string UpdateCompanyTableSettings = BasePath + "/updatetablesettings&API_KEY={API_KEY}";
+
+            /// <summary>
+            /// Şirketin yeni şifresini oluşturur
+            /// </summary>
+            public const string UpdateCompanyPassword = BasePath + "/updatecompanypassword&API_KEY={API_KEY}&oldPassword={oldPassword}&newPassword={newPassword}&confirmPassword={confirmPassword}";
         }
     }
 }

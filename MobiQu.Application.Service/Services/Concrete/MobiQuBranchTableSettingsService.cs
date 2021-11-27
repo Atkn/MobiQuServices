@@ -82,7 +82,7 @@ namespace MobiQu.Services.Application.Services.Concrete
                     companyTableSettings.IsShowTemperature = tableSettings.IsShowTemperature;
                     companyTableSettings.IsShowLockState = tableSettings.IsShowLockState;
                     companyTableSettings.IsShowDeliveryStatus = tableSettings.IsShowDeliveryStatus;
-
+                    companyTableSettings.ModifiedAt = DateTime.Now;
                     var result = await _tableSettings.UpdateEntity(companyTableSettings);
                     return result;
                 } 
