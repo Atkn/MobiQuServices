@@ -17,6 +17,7 @@ namespace MobiQu.Services.Core.Domain.DatabaseContext
         public DbSet<SmartBox> SmartBox { get; set; }
         public DbSet<ColdChainBox> ColdChainBox { get; set; }
         public DbSet<Company> Company { get; set; }
+        public DbSet<Device> Device { get; set; }
         public DbSet<MobiQuBranchTableSettings> MobiQuBranchTableSettings { get; set; }
     }
 }

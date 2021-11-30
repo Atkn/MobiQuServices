@@ -40,6 +40,7 @@ namespace MobiQu.API
             services.AddTransient<IPasswordCryptology, PasswordCryptology>();
 
             services.AddTransient<IRepository<SmartBox>, Repository<SmartBox>>();
+            services.AddTransient<IRepository<Device>, Repository<Device>>();
             services.AddTransient<ISmartBoxService, SmartBoxService>();
 
             services.AddTransient<IRepository<ColdChainBox>, Repository<ColdChainBox>>();

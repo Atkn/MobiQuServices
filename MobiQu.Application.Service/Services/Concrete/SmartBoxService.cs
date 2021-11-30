@@ -5,6 +5,7 @@ using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Common.Utilities;
 using MobiQu.Services.Application.Dto;
 using MobiQu.Services.Core.Domain.Entitites;
+using MobiQu.Services.Core.Domain.Entitites.Projects;
 using MobiQu.Services.Core.Persistence.EntityFramework.Repository.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,10 @@ namespace MobiQu.Application.Service.Concrete
     public class SmartBoxService : ISmartBoxService
     {
         private readonly IRepository<SmartBox> _smartBoxRepository;
-        public SmartBoxService(IRepository<SmartBox> smartBoxRepository)
+        private readonly IRepository<Device> _deviceRepository;
+        public SmartBoxService(IRepository<SmartBox> smartBoxRepository, IRepository<Device> deviceRepository)
         {
+            _deviceRepository = deviceRepository;
             _smartBoxRepository = smartBoxRepository;
         }
 
@@ -102,6 +105,69 @@ namespace MobiQu.Application.Service.Concrete
                 };
             }
             return null;
+        }
+        public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceIdAsync(Guid deviceId)
+        {
+            var smartBox = await _smartBoxRepository.FindAsync(x => x.DeviceId.Equals(deviceId));
+            if (smartBox != null)
+            {
+                return new ResponseModel<SmartBoxDto>
+                {
+                    IsSuccessFull = true,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseValue = new SmartBoxDto
+                    {
+                        Id = smartBox.Id,
+                        Title = smartBox.Title,
+                        CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
+                        ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
+                    }
+                };
+            }
+            return new ResponseModel<SmartBoxDto>
+            {
+                ResponseMessage = $"{deviceId} ile aratılan veri bulunamadı",
+                ResponseType = HttpResponseType.NotFound,
+                IsSuccessFull = true
+            };
+        }
+
+        public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceNumberAsync(string deviceNumber)
+        {
+            var device = await _deviceRepository.FindAsync(x=> x.DeviceNumber.Equals(deviceNumber));
+            if(device!= null)
+            {
+                var smartBox = await _smartBoxRepository.FindAsync(x => x.DeviceId.Equals(device.Id));
+                if (smartBox != null)
+                {
+                    return new ResponseModel<SmartBoxDto>
+                    {
+                        IsSuccessFull = true,
+                        ResponseDateTime = DateTime.Now,
+                        ResponseValue = new SmartBoxDto
+                        {
+                            Id = smartBox.Id,
+                            Title = smartBox.Title,
+                            CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
+                            ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
+                        }
+                    };
+                }
+                return new ResponseModel<SmartBoxDto>
+                {
+                    ResponseMessage = $"{device.Id} Herhangi Bir Kutuya Atanmadı",
+                    ResponseType = HttpResponseType.NotFound,
+                    IsSuccessFull = true
+                };
+            }
+            return new ResponseModel<SmartBoxDto>
+            {
+                ResponseMessage = $"{deviceNumber} herhangi bir veri bulamadık!",
+                ResponseType = HttpResponseType.NotFound,
+                IsSuccessFull = true
+            };
+
+
         }
     }
 }

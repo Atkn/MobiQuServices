@@ -88,6 +88,39 @@ namespace MobiQu.API.Controllers
 
         }
 
+        /// <summary>
+        /// Cihaz Id bilgisine göre veri getirir
+        /// </summary>
+        /// <param name="boxNumber"></param>
+        /// <returns></returns>
+        [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxDetailByDeviceId)]
+        public async Task<IActionResult> GetSmartBoxByDeviceId(Guid deviceId)
+        {
+            var response = await _smartBoxService.GetSmartBoxdByDeviceIdAsync(deviceId);
+            if (response.IsSuccessFull)
+            {
+                return Ok(response);
+            }
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// Cihaz Numarasına göre veri getirir
+        /// </summary>
+        /// <param name="boxNumber"></param>
+        /// <returns></returns>
+        [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxDetailByDeviceNumber)]
+        public async Task<IActionResult> GetSmartBoxByDeviceNumber(string deviceNumber)
+        {
+            var response = await _smartBoxService.GetSmartBoxdByDeviceNumberAsync(deviceNumber);
+            if (response.IsSuccessFull)
+            {
+                return Ok(response);
+            }
+            return BadRequest();
+        }
+
+
 
 
 

@@ -15,5 +15,7 @@ namespace MobiQu.Application.Service.Abstraction
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxByNumberAsync(string boxNumber);
 
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxByIdAsync(Guid boxId);
+        Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceIdAsync(Guid deviceId);
+        Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceNumberAsync(string deviceNumber);
     }
 }
