@@ -1,4 +1,5 @@
-﻿using MobiQu.Services.Application.Common.Models.Responses;
+﻿using MobiQu.Services.Application.Common.Dto.Device;
+using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Dto;
 using MobiQu.Services.Core.Domain.Entitites;
 using System;
@@ -16,6 +17,13 @@ namespace MobiQu.Application.Service.Abstraction
 
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxByIdAsync(Guid boxId);
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceIdAsync(Guid deviceId);
-        Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceNumberAsync(string deviceNumber);
+
+        Task<ResponseModel<DeviceDto>> GetDeviceInfoByDeviceNumberAsync(string deviceNumber);
+
+        Task<ResponseModel<DeviceDto>> GetDeviceInfoByDeviceIdAsync(Guid deviceId);
+
+        Task<ResponseModel<SmartBoxDto>> GetSmartBoxInformationByDeviceId(Guid deviceId);
+
+
     }
 }

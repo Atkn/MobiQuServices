@@ -97,5 +97,19 @@ namespace MobiQu.API.ApiRoute
             /// </summary>
             public const string UpdateCompanyPassword = BasePath + "/updatecompanypassword&API_KEY={API_KEY}&oldPassword={oldPassword}&newPassword={newPassword}&confirmPassword={confirmPassword}";
         }
+
+        public static class Device
+        {
+            /// <summary>
+            /// Aygıtın bilgilerini getirir
+            /// </summary>
+            public const string GetDeviceInformationByDeviceNumber = BasePath + "/getdeviceinfobydevicenumber&devicenumber={deviceNumber}";
+
+
+            /// <summary>
+            /// Aygıt kimliğine göre aygıtı getirir.
+            /// </summary>
+            public const string GetDeviceInformationByDeviceId = BasePath + "/getdeviceinfobydeviceId&deviceId={deviceId}";
+        }
     }
 }

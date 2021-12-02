@@ -9,7 +9,7 @@ namespace MobiQu.Services.Core.Domain.Entitites.Projects
     {
         public string DeviceNumber { get; set; }
 
-        public Guid SmartBoxId { get; set; }
+        public virtual SmartBox SmartBox { get; set; }
 
     }
 }

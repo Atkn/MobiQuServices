@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MobiQu.Application.Service.Abstraction;
+using MobiQu.Services.Application.Common.Dto.Device;
 using MobiQu.Services.Application.Common.Enums;
 using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Common.Utilities;
@@ -52,6 +53,8 @@ namespace MobiQu.Application.Service.Concrete
                 ResponseMessage = $"{boxId} ile aradığınız veriyi bulamadık!",
             };
         }
+
+
 
         public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxByNumberAsync(string boxNumber)
         {
@@ -132,42 +135,100 @@ namespace MobiQu.Application.Service.Concrete
             };
         }
 
-        public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxdByDeviceNumberAsync(string deviceNumber)
+        public async Task<ResponseModel<DeviceDto>> GetDeviceInfoByDeviceNumberAsync(string deviceNumber)
         {
-            var device = await _deviceRepository.FindAsync(x=> x.DeviceNumber.Equals(deviceNumber));
-            if(device!= null)
+            var device = await _deviceRepository.FindAsync(x => x.DeviceNumber.Equals(deviceNumber));
+            if (device != null)
             {
-                var smartBox = await _smartBoxRepository.FindAsync(x => x.DeviceId.Equals(device.Id));
-                if (smartBox != null)
+                return new ResponseModel<DeviceDto>
                 {
-                    return new ResponseModel<SmartBoxDto>
+                    IsSuccessFull = true,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseMessage = "Başarıyla Veri Bulundu",
+                    ResponseValue = new DeviceDto
                     {
-                        IsSuccessFull = true,
-                        ResponseDateTime = DateTime.Now,
-                        ResponseValue = new SmartBoxDto
-                        {
-                            Id = smartBox.Id,
-                            Title = smartBox.Title,
-                            CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
-                            ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
-                        }
-                    };
-                }
-                return new ResponseModel<SmartBoxDto>
-                {
-                    ResponseMessage = $"{device.Id} Herhangi Bir Kutuya Atanmadı",
-                    ResponseType = HttpResponseType.NotFound,
-                    IsSuccessFull = true
+                        Id = device.Id,
+                        //SmartBoxId = device.SmartBoxId,
+                        Title = device.DeviceNumber,
+                        CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(device.CreatedAt),
+                        ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(device.ModifiedAt),
+
+
+                    }
                 };
             }
-            return new ResponseModel<SmartBoxDto>
+            return new ResponseModel<DeviceDto>
             {
-                ResponseMessage = $"{deviceNumber} herhangi bir veri bulamadık!",
-                ResponseType = HttpResponseType.NotFound,
+                ResponseMessage = $"{deviceNumber} ile aradığınız veriyi bulamadık",
+                ResponseDateTime = DateTime.Now,
                 IsSuccessFull = true
             };
-
-
         }
+
+
+        public async Task<ResponseModel<DeviceDto>> GetDeviceInfoByDeviceIdAsync(Guid deviceId)
+        {
+            var device = await _deviceRepository
+                .Queryable(x => x.Id.Equals(deviceId))
+                .Include(x => x.SmartBox)
+                .FirstOrDefaultAsync();
+            if (device != null)
+            {
+                var response = new ResponseModel<DeviceDto>
+                {
+                    IsSuccessFull = true,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseMessage = "Başarıyla Veri Bulundu",
+                    ResponseValue = new DeviceDto
+                    {
+                        Id = device.Id,
+                        //SmartBoxId = device.SmartBoxId,
+                        Title = device.DeviceNumber,
+                        CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(device.CreatedAt),
+                        ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(device.ModifiedAt),
+                        SmartBox = device.SmartBox != null ? new SmartBoxDto
+                        {
+                            Id = device.SmartBox.Id,
+                            Title = device.SmartBox.Title,
+                            CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(device.SmartBox.CreatedAt),
+
+                        } : null
+                    }
+                };
+                return response;
+            }
+            return new ResponseModel<DeviceDto>
+            {
+                ResponseMessage = $"{deviceId} ile aradığınız veriyi bulamadık",
+                ResponseDateTime = DateTime.Now,
+                IsSuccessFull = true
+            };
+        }
+
+
+        public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxInformationByDeviceId(Guid deviceId)
+        {
+            var smartBox = await _smartBoxRepository.Queryable(x => x.DeviceId.Equals(deviceId)).Include(x => x.Device).FirstOrDefaultAsync();
+            if (smartBox != null)
+            {
+                var response = new ResponseModel<SmartBoxDto>
+                {
+                    IsSuccessFull = true,
+                    ResponseValue = new SmartBoxDto
+                    {
+                        Id = smartBox.Id,
+                        Title = smartBox.Title,
+                    }
+                };
+            }
+            return null;
+        }
+
+
+
     }
 }
+
+
+
+

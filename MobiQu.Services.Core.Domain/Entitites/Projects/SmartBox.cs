@@ -11,7 +11,7 @@ namespace MobiQu.Services.Core.Domain.Entitites
         public Guid CompanyId { get; set; }
 
         public Guid DeviceId { get; set; }
-        public virtual Device Device { get; set; }
 
+        public virtual Device Device { get; set; }
     }
 }
