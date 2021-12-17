@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MobiQu.Application.Service.Abstraction;
+using MobiQu.Services.Application.Common.Models.Responses;
+using MobiQu.Services.Application.Dto;
 using MobiQu.Services.Application.Services.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -28,6 +31,8 @@ namespace MobiQu.API.Controllers
         /// <param name="pageNumber">Kaçıncı Sayfadaki Veri.</param>
         /// <param name="pageSize">Sayfada Kaç Veri Gösterilecek.</param>
         [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxes)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<List<SmartBoxDto>>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Index(string API_KEY, int skip, int pageSize)
         {
             var company = await _companyService.GetCompanyInfomartionByApiKeyAsync(API_KEY);
@@ -53,6 +58,8 @@ namespace MobiQu.API.Controllers
         /// <param name="boxNumber"></param>
         /// <returns></returns>
         [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxDetailByNumber)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<SmartBoxDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSmartBoxDetailByNumber(string boxNumber)
         {
             var response = await _smartBoxService.GetSmartBoxByNumberAsync(boxNumber);
@@ -74,6 +81,8 @@ namespace MobiQu.API.Controllers
         /// <param name="boxNumber"></param>
         /// <returns></returns>
         [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxDetailById)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<SmartBoxDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSmartBoxDetailById(Guid boxId)
         {
             var response = await _smartBoxService.GetSmartBoxByIdAsync(boxId);
@@ -94,12 +103,33 @@ namespace MobiQu.API.Controllers
         /// <param name="boxNumber"></param>
         /// <returns></returns>
         [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxDetailByDeviceId)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<SmartBoxDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSmartBoxByDeviceId(Guid deviceId)
         {
             var response = await _smartBoxService.GetSmartBoxdByDeviceIdAsync(deviceId);
             if (response.IsSuccessFull)
             {
                 return Ok(response);
+            }
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// Şirkete bağlı akıllı kutu sayısını döndürür
+        /// </summary>
+        /// <param name="API_KEY"></param>
+        /// <returns></returns>
+
+        [HttpGet(ApiRoute.ApiRoute.SmartBox.GetSmartBoxCountCompany)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<SmartBoxDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetSmartBoxCountCompany(string API_KEY)
+        {
+            var result = await _smartBoxService.GetSmartBoxCountCompanyAsync(API_KEY);
+            if (result.IsSuccessFull)
+            {
+                return Ok(result);
             }
             return BadRequest();
         }

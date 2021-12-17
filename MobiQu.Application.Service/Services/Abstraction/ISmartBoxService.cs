@@ -24,6 +24,7 @@ namespace MobiQu.Application.Service.Abstraction
 
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxInformationByDeviceId(Guid deviceId);
 
+        Task<ResponseModel<SmartBoxDto>> GetSmartBoxCountCompanyAsync(string API_KEY);
 
     }
 }

@@ -38,6 +38,9 @@ namespace MobiQu.API.ApiRoute
             /// belirtilen cihaz id bilgisine göre kutu verilerini getirir
             /// </summary>
             public const string GetSmartBoxDetailByDeviceId = BasePath + "/smartboxdeviceid&deviceid={deviceid}";
+
+
+            public const string GetSmartBoxCountCompany = BasePath + "/smartboxcountcompany&API_KEY={API_KEY}";
         }
 
         public static class ColdChainBox

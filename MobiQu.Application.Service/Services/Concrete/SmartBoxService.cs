@@ -20,10 +20,12 @@ namespace MobiQu.Application.Service.Concrete
     {
         private readonly IRepository<SmartBox> _smartBoxRepository;
         private readonly IRepository<Device> _deviceRepository;
-        public SmartBoxService(IRepository<SmartBox> smartBoxRepository, IRepository<Device> deviceRepository)
+        private readonly IRepository<Company> _companyRepository;
+        public SmartBoxService(IRepository<SmartBox> smartBoxRepository, IRepository<Device> deviceRepository, IRepository<Company> companyRepository)
         {
             _deviceRepository = deviceRepository;
             _smartBoxRepository = smartBoxRepository;
+            _companyRepository = companyRepository;
         }
 
         public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxByIdAsync(Guid boxId)
@@ -39,6 +41,15 @@ namespace MobiQu.Application.Service.Concrete
                         Title = smartBox.Title,
                         CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
                         ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
+                        MaxTemperature = string.IsNullOrEmpty(smartBox.MaxTemperature) ? "Bu Kutu İçin Tavan Sıcaklık Değeri Belirtilmedi" : smartBox.MaxTemperature,
+                        MinTemperature = string.IsNullOrEmpty(smartBox.MinTemperature) ? "Bu Kutu İçin Taban Sıcaklık Değeri Belirtilmedi" : smartBox.MinTemperature,
+                        MinMoisture = string.IsNullOrEmpty(smartBox.MinMoisture) ? "Bu Kutu İçin Taban Nem Değeri Belirtilmedi" : smartBox.MinMoisture,
+                        MaxMoisture = string.IsNullOrEmpty(smartBox.MaxMoisture) ? "Bu Kutu İçin Tavan Nem Değeri Belirtilmedi" : smartBox.MaxMoisture,
+                        MaxMoistureValue = smartBox.MaxMoistureValue,
+                        MaxTemperatureValue = smartBox.MaxTemperatureValue,
+                        MinMoistureValue = smartBox.MinMoistureValue,
+                        MinTemperatureValue = smartBox.MinTemperatureValue,
+                        CompanyId = smartBox.CompanyId
                     },
                     ResponseDateTime = DateTime.Now,
                     IsSuccessFull = true,
@@ -49,7 +60,7 @@ namespace MobiQu.Application.Service.Concrete
             return new ResponseModel<SmartBoxDto>
             {
                 ResponseType = HttpResponseType.NotFound,
-                IsSuccessFull = false,
+                IsSuccessFull = true,
                 ResponseMessage = $"{boxId} ile aradığınız veriyi bulamadık!",
             };
         }
@@ -124,6 +135,15 @@ namespace MobiQu.Application.Service.Concrete
                         Title = smartBox.Title,
                         CreatedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.CreatedAt),
                         ModifiedAtString = EntityUtilities<SmartBox>.DateTimeFormater(smartBox.ModifiedAt),
+                        MaxTemperature = string.IsNullOrEmpty(smartBox.MaxTemperature) ? "Bu Kutu İçin Tavan Sıcaklık Değeri Belirtilmedi" : smartBox.MaxTemperature,
+                        MinTemperature = string.IsNullOrEmpty(smartBox.MinTemperature) ? "Bu Kutu İçin Taban Sıcaklık Değeri Belirtilmedi" : smartBox.MinTemperature,
+                        MinMoisture = string.IsNullOrEmpty(smartBox.MinMoisture) ? "Bu Kutu İçin Taban Nem Değeri Belirtilmedi" : smartBox.MinMoisture,
+                        MaxMoisture = string.IsNullOrEmpty(smartBox.MaxMoisture) ? "Bu Kutu İçin Tavan Nem Değeri Belirtilmedi" : smartBox.MaxMoisture,
+                        MaxMoistureValue = smartBox.MaxMoistureValue,
+                        MaxTemperatureValue = smartBox.MaxTemperatureValue,
+                        MinMoistureValue = smartBox.MinMoistureValue,
+                        MinTemperatureValue = smartBox.MinTemperatureValue,
+                        CompanyId = smartBox.CompanyId
                     }
                 };
             }
@@ -224,11 +244,35 @@ namespace MobiQu.Application.Service.Concrete
             return null;
         }
 
+        public async Task<ResponseModel<SmartBoxDto>> GetSmartBoxCountCompanyAsync(string API_KEY)
+        {
+            var company = await _companyRepository.FindAsync(x => x.API_KEY.Equals(API_KEY));
+            if (company != null)
+            {
+                var smartBoxCount = _smartBoxRepository.DataCount(x => x.CompanyId.Equals(company.Id));
+                return new ResponseModel<SmartBoxDto>
+                {
+                    IsSuccessFull = true,
+                    DataCount = smartBoxCount,
+                    ResponseValue = null,
+                    ResponseDateTime = DateTime.Now,
+                    ResponseMessage = $"{company.Title} akıllı kutu sayısı {smartBoxCount}"
+                };
+
+            }
+            return new ResponseModel<SmartBoxDto>
+            {
+                IsSuccessFull = true,
+                ResponseMessage = $"{API_KEY} ile ilgili bir şirket bulunamadı",
+
+            };
+
+
+        }
 
 
     }
 }
-
 
 
 

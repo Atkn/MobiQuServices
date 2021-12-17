@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MobiQu.Services.Application.Common.Dto.MobiQuBranchTableSettings;
 using MobiQu.Services.Application.Common.Models.BodyModels.Settings;
+using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Services.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -24,6 +27,8 @@ namespace MobiQu.API.Controllers
         /// <param name="companyId"></param>
         /// <returns></returns>
         [HttpGet(ApiRoute.ApiRoute.Settings.GetCompanyTableSettings)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<TableSettingsDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Index(string API_KEY)
         {
             var response = await _tableSettings.GetTableSettingsAsync(API_KEY);
