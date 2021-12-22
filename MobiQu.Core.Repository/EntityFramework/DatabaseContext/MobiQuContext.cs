@@ -11,7 +11,7 @@ namespace MobiQu.Services.Core.Domain.DatabaseContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=MobiQu");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=MobiQu;User Id=SA;Password:Qazxsw+123;");
         }
 
         public DbSet<SmartBox> SmartBox { get; set; }
