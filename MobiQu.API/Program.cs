@@ -20,8 +20,6 @@ namespace MobiQu.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://0.0.0.0:5000;https://0.0.0.0:5001");
-                    webBuilder.UseKestrel();
                     webBuilder.UseStartup<Startup>();
                 });
     }
