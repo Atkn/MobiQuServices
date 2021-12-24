@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ using MobiQu.Services.Core.Persistence.EntityFramework.Repository.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MobiQu.API
@@ -51,7 +53,10 @@ namespace MobiQu.API
 
             services.AddTransient<IRepository<MobiQuBranchTableSettings>, Repository<MobiQuBranchTableSettings>>();
             services.AddTransient<IMobiQuBranchTableSettingsService, MobiQuBranchTableSettingsService>();
-
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+            });
             services.AddSwaggerGen(m =>
             {
 
@@ -73,6 +78,7 @@ namespace MobiQu.API
                     }
                 });
             });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +94,10 @@ namespace MobiQu.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseHttpsRedirection();
-
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseRouting();
 
             app.UseAuthorization();
