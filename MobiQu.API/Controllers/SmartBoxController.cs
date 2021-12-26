@@ -134,8 +134,27 @@ namespace MobiQu.API.Controllers
             return BadRequest();
         }
 
-        
-        
+
+        [HttpPost(ApiRoute.ApiRoute.SmartBox.SmartBoxUnLock)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(object))]
+        public async Task<IActionResult> UnLockBox(int lockState, string deviceNumber)
+        {
+            if (lockState == 1)
+            {
+                var result = await _smartBoxService.SmartBoxUnLockAsyncByDeviceNumber(lockState, deviceNumber);
+                return Ok(result);
+            }
+            return Ok(new
+            {
+                message = "Kutu Açılması İçin Yanlış Değer Girildi",
+                Result = false,
+            });
+
+
+        }
+
+
 
 
 

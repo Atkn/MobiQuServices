@@ -41,6 +41,11 @@ namespace MobiQu.API.ApiRoute
 
 
             public const string GetSmartBoxCountCompany = BasePath + "/smartboxcountcompany&API_KEY={API_KEY}";
+
+            /// <summary>
+            /// cihaz bilgisine göre kutunun kilidini açar
+            /// </summary>
+            public const string SmartBoxUnLock = BasePath + "/smartboxopenlock&unlock={lockState}&deviceNumber={deviceNumber}";
         }
 
         public static class ColdChainBox

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MobiQu.Application.Service.Abstraction;
 using MobiQu.Services.Application.Common.Dto.Device;
+using MobiQu.Services.Application.Common.Dto.SmartBox;
 using MobiQu.Services.Application.Common.Enums;
 using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Common.Utilities;
@@ -8,6 +9,9 @@ using MobiQu.Services.Application.Dto;
 using MobiQu.Services.Core.Domain.Entitites;
 using MobiQu.Services.Core.Domain.Entitites.Projects;
 using MobiQu.Services.Core.Persistence.EntityFramework.Repository.Abstraction;
+using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Client.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +25,8 @@ namespace MobiQu.Application.Service.Concrete
         private readonly IRepository<SmartBox> _smartBoxRepository;
         private readonly IRepository<Device> _deviceRepository;
         private readonly IRepository<Company> _companyRepository;
+        private static IMqttClient _client;
+        private static IMqttClientOptions _options;
         public SmartBoxService(IRepository<SmartBox> smartBoxRepository, IRepository<Device> deviceRepository, IRepository<Company> companyRepository)
         {
             _deviceRepository = deviceRepository;
@@ -270,7 +276,80 @@ namespace MobiQu.Application.Service.Concrete
 
         }
 
+        public async Task<SmartBoxLockStateModel> SmartBoxUnLockAsyncByDeviceNumber(int lockState, string deviceNumber)
+        {
+            var connectedResult = false;
+            var connectedStringMessage = "Başarıyla Gönderildi";
+            try
+            {
+                var factory = new MqttFactory();
+                _client = factory.CreateMqttClient();
+                _options = new MqttClientOptionsBuilder()
+                    .WithClientId("publisherId")
+                    .WithTcpServer("localhost", 1884)
+                    .WithCredentials("bud", "%spencer%")
+                    .WithCleanSession()
+                    .Build();
 
+                //handlers
+                _client.UseConnectedHandler(e =>
+                {
+                    connectedResult = true;
+                });
+                _client.UseDisconnectedHandler(e =>
+                {
+                    connectedStringMessage = "Bağlantı Kesildi";
+                    connectedResult = false;
+                });
+                _client.UseApplicationMessageReceivedHandler(e =>
+                {
+                    try
+                    {
+                        string topic = e.ApplicationMessage.Topic;
+                        if (string.IsNullOrWhiteSpace(topic) == false)
+                        {
+                            string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message, ex);
+                    }
+                });
+                _client.ConnectAsync(_options).Wait();
+                var testMessage = new MqttApplicationMessageBuilder()
+                    .WithTopic("state")
+                    .WithPayload($"Mesaj 24 Aralık 2021 tarihinde gönderildi {lockState} {deviceNumber}")
+                    .WithExactlyOnceQoS()
+                    .WithRetainFlag()
+                    .Build();
+                if (_client.IsConnected)
+                {
+
+                    Console.WriteLine($"publishing at {DateTime.Now.ToString("dd/MM/yyyy hh:mm")}");
+                    Console.WriteLine("bir kez gönderildi");
+                    await _client.PublishAsync(testMessage);
+                }
+                return new SmartBoxLockStateModel
+                {
+                    IsSuccessFull = true,
+                    Message = "Başaryıla Mesaj Gönderildi"
+                };
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return new SmartBoxLockStateModel
+                {
+                    IsSuccessFull = false,
+                    Message = "Gönderilemedi" + ex.Message
+                };
+
+            }
+
+        }
     }
 }
 

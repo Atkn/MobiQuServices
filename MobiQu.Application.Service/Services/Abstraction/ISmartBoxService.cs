@@ -1,4 +1,5 @@
 ﻿using MobiQu.Services.Application.Common.Dto.Device;
+using MobiQu.Services.Application.Common.Dto.SmartBox;
 using MobiQu.Services.Application.Common.Models.Responses;
 using MobiQu.Services.Application.Dto;
 using MobiQu.Services.Core.Domain.Entitites;
@@ -25,6 +26,8 @@ namespace MobiQu.Application.Service.Abstraction
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxInformationByDeviceId(Guid deviceId);
 
         Task<ResponseModel<SmartBoxDto>> GetSmartBoxCountCompanyAsync(string API_KEY);
+
+        Task<SmartBoxLockStateModel> SmartBoxUnLockAsyncByDeviceNumber(int lockState, string deviceNumber);
 
     }
 }
