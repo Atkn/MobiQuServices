@@ -12,5 +12,11 @@ namespace MobiQu.API.Controllers
         {
             return Redirect("/swagger");
         }
+
+        [HttpGet("test-url")]
+        public IActionResult ConnectUrl()
+        {
+            return Ok(new { message = "anasayfa" });
+        }
     }
 }
