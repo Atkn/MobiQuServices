@@ -53,10 +53,10 @@ namespace MobiQu.API
 
             services.AddTransient<IRepository<MobiQuBranchTableSettings>, Repository<MobiQuBranchTableSettings>>();
             services.AddTransient<IMobiQuBranchTableSettingsService, MobiQuBranchTableSettingsService>();
-            //services.Configure<ForwardedHeadersOptions>(options =>
-            //{
-            //    options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
-            //});
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("45.130.13.89"));
+            });
             services.AddSwaggerGen(m =>
             {
 
