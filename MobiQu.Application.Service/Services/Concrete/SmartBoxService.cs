@@ -286,8 +286,8 @@ namespace MobiQu.Application.Service.Concrete
                 _client = factory.CreateMqttClient();
                 _options = new MqttClientOptionsBuilder()
                     .WithClientId("publisherId")
-                    .WithTcpServer("localhost", 1884)
-                    .WithCredentials("bud", "%spencer%")
+                    .WithTcpServer("broker.emqx.io", 1883)
+                    .WithCredentials("emqx", "public")
                     .WithCleanSession()
                     .Build();
 
@@ -318,16 +318,13 @@ namespace MobiQu.Application.Service.Concrete
                 });
                 _client.ConnectAsync(_options).Wait();
                 var testMessage = new MqttApplicationMessageBuilder()
-                    .WithTopic("state")
-                    .WithPayload($"Mesaj 24 Aralık 2021 tarihinde gönderildi {lockState} {deviceNumber}")
+                    .WithTopic("unlock")
+                    .WithPayload($"1")
                     .WithExactlyOnceQoS()
                     .WithRetainFlag()
                     .Build();
                 if (_client.IsConnected)
                 {
-
-                    Console.WriteLine($"publishing at {DateTime.Now.ToString("dd/MM/yyyy hh:mm")}");
-                    Console.WriteLine("bir kez gönderildi");
                     await _client.PublishAsync(testMessage);
                 }
                 return new SmartBoxLockStateModel
