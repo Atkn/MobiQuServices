@@ -135,7 +135,7 @@ namespace MobiQu.API.Controllers
         }
 
 
-        [HttpPost(ApiRoute.ApiRoute.SmartBox.SmartBoxUnLock)]
+        [HttpGet(ApiRoute.ApiRoute.SmartBox.SmartBoxUnLock)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(object))]
         public async Task<IActionResult> UnLockBox(int lockState, string deviceNumber)
