@@ -68,7 +68,7 @@ namespace MobiQu.API
                     TermsOfService = new Uri("https://mobiqu.com/terms-of-service"),
                     Contact = new OpenApiContact
                     {
-                        Name = "Atakan - Sertan - Selcuk",
+                        Name = "Selcuk - Atakan - Sertan",
                         Email = "info@mobiqu.com",
                     },
                     License = new OpenApiLicense
