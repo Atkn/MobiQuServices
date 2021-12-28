@@ -147,6 +147,7 @@ namespace MobiQu.API.Controllers
             }
             return Ok(new
             {
+
                 message = "Kutu Açılması İçin Yanlış Değer Girildi",
                 Result = false,
             });
