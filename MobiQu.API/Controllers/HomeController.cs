@@ -18,5 +18,11 @@ namespace MobiQu.API.Controllers
         {
             return Ok(new { message = "anasayfa" });
         }
+
+        [HttpGet("mobiqu")]
+        public IActionResult Connection()
+        {
+            return Ok(new { message = "mobiqu" });
+        }
     }
 }
