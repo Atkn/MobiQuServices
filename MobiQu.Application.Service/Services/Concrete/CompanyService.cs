@@ -76,7 +76,7 @@ namespace MobiQu.Services.Application.Services.Concrete
 
         public async Task<ResponseModel<RefreshPasswordDto>> UpdatePasswordAsync(string apiKey, string oldPassword, string newPassword, string confirmPassword)
         {
-            
+
             bool isEqualsPassword = newPassword.Equals(confirmPassword);
             if (isEqualsPassword)
             {
@@ -142,6 +142,7 @@ namespace MobiQu.Services.Application.Services.Concrete
 
         public async Task<ResponseModel<LoginResponseDto>> CompanyDetectInformationAsync(string email, string password)
         {
+
             Expression<Func<Company, bool>> expression = x => x.Email.Equals(email);
             var companyResponse = await _companyRepository.FindAsync(expression);
             if (companyResponse != null)
@@ -188,6 +189,8 @@ namespace MobiQu.Services.Application.Services.Concrete
                     CanLogin = false,
                 }
             };
+
+
         }
     }
 }
