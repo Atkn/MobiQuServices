@@ -12,6 +12,7 @@ using MobiQu.Services.Core.Persistence.EntityFramework.Repository.Abstraction;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -280,14 +281,16 @@ namespace MobiQu.Application.Service.Concrete
         {
             var connectedResult = false;
             var connectedStringMessage = "Başarıyla Gönderildi";
+            object unlock = new { unlock = 1 };
+            string jsonString = JsonConvert.SerializeObject(unlock);
             try
             {
                 var factory = new MqttFactory();
                 _client = factory.CreateMqttClient();
                 _options = new MqttClientOptionsBuilder()
-                    .WithClientId("publisherId")
-                    .WithTcpServer("broker.emqx.io", 1883)
-                    .WithCredentials("emqx", "public")
+                    .WithClientId("easymqtt")
+                    .WithTcpServer("91.194.54.44", 1883)
+                    .WithCredentials("", "")
                     .WithCleanSession()
                     .Build();
 
@@ -318,8 +321,8 @@ namespace MobiQu.Application.Service.Concrete
                 });
                 _client.ConnectAsync(_options).Wait();
                 var testMessage = new MqttApplicationMessageBuilder()
-                    .WithTopic("unlock")
-                    .WithPayload($"1")
+                    .WithTopic("0005/UNLOCK")
+                    .WithPayload(jsonString)
                     .WithExactlyOnceQoS()
                     .WithRetainFlag()
                     .Build();
