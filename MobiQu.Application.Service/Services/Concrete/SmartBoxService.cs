@@ -279,8 +279,8 @@ namespace MobiQu.Application.Service.Concrete
 
         public async Task<SmartBoxLockStateModel> SmartBoxUnLockAsyncByDeviceNumber(int lockState, string deviceNumber)
         {
-            var connectedResult = false;
-            var connectedStringMessage = "Başarıyla Gönderildi";
+            string connectedResult = false;
+            string connectedStringMessage = "Başarıyla Gönderildi";
             object unlock = new { unlock = 1 };
             string jsonString = JsonConvert.SerializeObject(unlock);
             try
