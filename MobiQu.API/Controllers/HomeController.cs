@@ -19,7 +19,7 @@ namespace MobiQu.API.Controllers
             return Ok(new { message = "anasayfa" });
         }
 
-        [HttpGet("test-url")]
+        [HttpGet("test-url2")]
         public IActionResult ConnectUrlBase()
         {
             return Ok(new { message = "bases" });
